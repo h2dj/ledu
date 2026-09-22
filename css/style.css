@@ -16,6 +16,12 @@
 
 * { box-sizing: border-box; }
 
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -147,23 +153,23 @@ h1, h2, h3 { margin: 0; line-height: 1.35; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 110px;
-  padding: 14px 8px;
+  gap: 8px;
+  min-height: 130px;
+  padding: 16px 10px;
   border-radius: var(--radius);
   border: 2px solid var(--color-border);
   background: #fff;
   cursor: pointer;
   text-align: center;
 }
-.topic-card.selected {
+.topic-card:active {
   border-color: var(--color-primary);
   background: #eaf1ff;
 }
 .topic-card--all { grid-column: 1 / -1; }
-.topic-emoji { font-size: 1.8em; }
-.topic-name { font-weight: 700; }
-.topic-count { font-size: 0.85em; color: var(--color-muted); }
+.topic-emoji { font-size: 2.2em; }
+.topic-name { font-weight: 800; font-size: 1.3em; line-height: 1.3; }
+.topic-count { font-size: 0.9em; color: var(--color-muted); }
 
 /* 퀴즈 진행 */
 .progress-wrap {

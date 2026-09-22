@@ -68,11 +68,16 @@ document.getElementById("btn-big-text").addEventListener("click", toggleBigText)
 document.getElementById("btn-speech").addEventListener("click", toggleSpeech);
 
 // ---------- 주제 선택 화면 ----------
+// 카드를 누르면 곧바로 다음 화면(연습 안내)으로 넘어갑니다. 별도의 "다음" 버튼 확인이 필요 없습니다.
 function openTopicSelect() {
   state.selectedTopicIds = [];
   renderTopicCards();
-  updateTopicNextButton();
   showScreen("topics");
+}
+
+function chooseTopics(topicIds) {
+  state.selectedTopicIds = topicIds;
+  openInfoScreen();
 }
 
 function renderTopicCards() {
@@ -83,40 +88,19 @@ function renderTopicCards() {
   allCard.type = "button";
   allCard.className = "topic-card topic-card--all";
   allCard.innerHTML = `<span class="topic-emoji">🗂️</span><span class="topic-name">전체 복습</span><span class="topic-count">${TOPICS.reduce((n, t) => n + t.questions.length, 0)}문항</span>`;
-  allCard.addEventListener("click", () => {
-    const allSelected = state.selectedTopicIds.length === TOPICS.length;
-    state.selectedTopicIds = allSelected ? [] : TOPICS.map((t) => t.id);
-    renderTopicCards();
-    updateTopicNextButton();
-  });
-  if (state.selectedTopicIds.length === TOPICS.length) {
-    allCard.classList.add("selected");
-  }
+  allCard.addEventListener("click", () => chooseTopics(TOPICS.map((t) => t.id)));
   container.appendChild(allCard);
 
   TOPICS.forEach((topic) => {
     const card = document.createElement("button");
     card.type = "button";
     card.className = "topic-card";
-    if (state.selectedTopicIds.includes(topic.id)) card.classList.add("selected");
     card.innerHTML = `<span class="topic-emoji">${topic.emoji}</span><span class="topic-name">${topic.name}</span><span class="topic-count">${topic.questions.length}문항</span>`;
-    card.addEventListener("click", () => {
-      const idx = state.selectedTopicIds.indexOf(topic.id);
-      if (idx >= 0) state.selectedTopicIds.splice(idx, 1);
-      else state.selectedTopicIds.push(topic.id);
-      renderTopicCards();
-      updateTopicNextButton();
-    });
+    card.addEventListener("click", () => chooseTopics([topic.id]));
     container.appendChild(card);
   });
 }
 
-function updateTopicNextButton() {
-  const btn = document.getElementById("btn-topics-next");
-  btn.disabled = state.selectedTopicIds.length === 0;
-}
-
-document.getElementById("btn-topics-next").addEventListener("click", () => openInfoScreen());
 document.getElementById("btn-topics-back").addEventListener("click", () => showScreen("start"));
 
 // ---------- 연습 안내 화면 ----------
